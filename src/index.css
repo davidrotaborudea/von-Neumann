@@ -27,11 +27,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: linear-gradient(
-    to left top,
-    rgb(130, 213, 246),
-    rgb(55, 139, 254)
-  );
+
 }
 
 h1 {

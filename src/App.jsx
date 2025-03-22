@@ -9,9 +9,9 @@ import { UnidadControl } from "./vonNeumannArchitecture/UnidadControl.js";
 //fetch decode and execute
 function App() {
   // ((2 ^ 2) + 2) ^ 2 = 36
-  const [unidadControl, setUnidadControl] = useState(new UnidadControl());
-  const [memoria, setMemoria] = useState(new Memoria());
-  const [alu, setAlu] = useState(new Alu());
+  const [memoria, setMemoria] = useState(() => new Memoria());
+  const [unidadControl, setUnidadControl] = useState(() => new UnidadControl());
+  const [alu, setAlu] = useState(() => new Alu());  
   const [op, setOp] = useState({ opNombre: "..." });
   const [contador, setContador] = useState(0);
   const [siguiente, setSiguiente] = useState(true);
@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     setvector(memoria.contenido);
-  }, []);
+  }, [memoria]);
 
   useEffect(() => {
     console.log(`case ${contador}`);
@@ -35,7 +35,7 @@ function App() {
             registroDirecciones: unidadControl.contadorPrograma,
           };
         });
-        setContador((contador + 1) % 8);
+        
         break;
 
       case 1:
@@ -45,7 +45,6 @@ function App() {
             contadorPrograma: prevObj.contadorPrograma + 1,
           });
         });
-        setContador((contador + 1) % 8);
         break;
 
       case 2:
@@ -56,7 +55,6 @@ function App() {
               memoria.contenido[parseInt(memoria.registroDirecciones)],
           };
         });
-        setContador((contador + 1) % 8);
         break;
 
       case 3:
@@ -67,7 +65,6 @@ function App() {
             registroInstrucciones: memoria.registroDatos,
           });
         });
-        setContador((contador + 1) % 8);
         break;
 
       case 4:
@@ -79,7 +76,6 @@ function App() {
           });
           return andom;
         });
-        setContador((contador + 1) % 8);
         break;
 
       //Se setea el registro de datos de la memoria con el operando buscado
@@ -88,7 +84,6 @@ function App() {
           ...memoria,
           registroDatos: memoria.contenido[parseInt(op?.operando, 2)],
         });
-        setContador((contador + 1) % 8);
         break;
 
       //Se le envia a la ALU el valor del  registro de datos de la memoria y la ALU
@@ -100,7 +95,6 @@ function App() {
             registroEntrada: memoria.registroDatos,
           });
         });
-        setContador((contador + 1) % 8);
         break;
 
       //Se realiza la operación indicada en la decodificación de la unidad de control
@@ -121,9 +115,9 @@ function App() {
           alert("Fin de la ejecución");
           break;
         }
-        setContador((contador + 1) % 8);
         break;
     }
+    setContador((contador + 1) % 8);
   }, [siguiente]);
 
   return (
